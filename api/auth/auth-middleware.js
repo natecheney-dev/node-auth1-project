@@ -14,7 +14,7 @@ function restricted(req, res, next) {
     next()
   }
   else {
-    next({ status: 401, message: 'You shall not pass!'})
+    next({ status: 401, message: 'You shall not pass!' })
   }
 }
 
@@ -27,17 +27,17 @@ function restricted(req, res, next) {
   }
 */
 async function checkUsernameFree(req, res, next) {
-  try{
+  try {
     const { username } = req.body
-    const exist_username = await User.findBy({ username: username})
-    if(exist_username){
-      return next({ status: 422, message: 'Username taken'})
+    const [exist_username] = await User.findBy({ username })
+    if (exist_username) {
+      return next({ status: 422, message: 'Username taken' })
     }
-    else{
+    else {
       next()
     }
   }
-  catch(err){
+  catch (err) {
     next(err)
   }
 }
@@ -51,17 +51,17 @@ async function checkUsernameFree(req, res, next) {
   }
 */
 async function checkUsernameExists(req, res, next) {
-  try{
+  try {
     const { username } = req.body
-    const exist_username = await User.findBy({ username: username}) 
-    if(exist_username) {
-      next({ status:401, message: `Invalid credentials`})
+    const [exist_username] = await User.findBy({ username })
+    if (!exist_username) {
+      next({ status: 401, message: `Invalid credentials` })
     }
-    else{
+    else {
       next()
     }
   }
-  catch(err){
+  catch (err) {
     next(err)
   }
 }
@@ -76,10 +76,10 @@ async function checkUsernameExists(req, res, next) {
 */
 function checkPasswordLength(req, res, next) {
   const { password } = req.body
-  if (!password || password.length.trim() < 4) {
-    next({ status: 422, message: `Password must be longer than 3 chars`})
+  if (!password || password.trim().length < 4) {
+    next({ status: 422, message: `Password must be longer than 3 chars` })
   }
-  else{
+  else {
     next()
   }
 }
